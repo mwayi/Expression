@@ -10,8 +10,8 @@
     ],
     "minimum-stability": "dev",
     "autoload": {
-        "psr-0": {
-            "Smrtr\\Condition\\": ["src"]
+        "psr-4": {
+            "Smrtr\\Expression\\": ["src"]
         }
     },
     "require": {

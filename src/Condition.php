@@ -34,7 +34,7 @@ class Condition
         if (array_key_exists($attribute, $this->attributes)) {
             return $this->attributes[$attribute];
         }
-        
+
         throw new \Exception('Attribute [['.$attribute.']] does not exist.');
     }
 
@@ -64,9 +64,9 @@ class Condition
     protected function resolveOperator($operator)
     {
         $operators = array_merge(
-            \Smrtr\Viola\VQL::$comparisonOperators,
-            \Smrtr\Viola\VQL::$wordOperators,
-            \Smrtr\Viola\VQL::$arrayableOperators
+            Expression::$comparisonOperators,
+            Expression::$wordOperators,
+            Expression::$arrayableOperators
         );
 
         if (trim($operator) && !in_array($operator, $operators)) {
@@ -197,7 +197,7 @@ class Condition
      */
     protected function isArrayble($operator)
     {
-        return in_array(trim($operator), \Smrtr\Viola\VQL::$arrayableOperators);
+        return in_array(trim($operator), Expression::$arrayableOperators);
     }
 
     /**
@@ -228,7 +228,7 @@ class Condition
      */
     protected function normalise($value)
     {
-        return preg_replace('/'.implode('|', \Smrtr\Viola\VQL::$comparisonOperators).'/i', ' $0 ', $value);
+        return preg_replace('/'.implode('|', Expression::$comparisonOperators).'/i', ' $0 ', $value);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Smrtr\Expression\Commands;
 
+use Smrtr\Expression\Expression;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -9,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-class Expression extends AbstractCommand
+class Expression extends Command
 {
 	/**
 	 * The console command name.
@@ -32,7 +33,10 @@ class Expression extends AbstractCommand
 	 */
 	public function fire()
 	{
-		
+		$expression = new Expression($this->option('i'));
+		$expressionObject = $expression->toArray();
+
+		pre_dump($expressionObject);
 	}
 
 	/**

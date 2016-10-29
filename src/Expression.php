@@ -1,6 +1,6 @@
 <?php
 
-namespace Smrtr;
+namespace Smrtr\Expression;
 
 use Smrtr\Expression\Condition;
 
