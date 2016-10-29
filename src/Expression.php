@@ -30,20 +30,27 @@ class Expression
     protected $normalised = null;
 
     /**
-     * @var array logical operators
+     * @var array logical operators.
      */
     public static $logicalOperators = ['and', 'or'];
 
     /**
-     * @var array arrayable operators
+     * @var array arrayable operators.
      */
     public static $arrayableOperators = ['in', 'between', 'between', 'notbetween'];
 
     /**
-     * @var array comparison operators
+     * @var array comparison operators.
      */
     public static $comparisonOperators = [
-        '=', '!=', '>', '<', '<>', '><', 'is', 'in', 'not', 'gt', 'lt', 'eq', 'like'
+        '=', '!=', '>', '<', '<>', '><'
+    ];
+
+    /**
+     * @var array comparison operators as words.
+     */
+    public static $wordOperators = [
+        'is', 'in', 'not', 'gt', 'lt', 'eq', 'like'
     ];
 
     /**
@@ -257,7 +264,7 @@ class Expression
      *
      * Ensure that ((((a + b)))) resolves to a + b
      *
-     * @param  string $expression the expression.
+     * @param  string $expression the expression
      * @return string The unwrapped expression.
      */
     protected function unwrap($expression)

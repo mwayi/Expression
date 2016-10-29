@@ -26,7 +26,6 @@ class Condition
      * Get attributes.
      *
      * @param string $attribute
-     *
      * @return string
      */
     public function __get($attribute)
@@ -43,7 +42,6 @@ class Condition
      *
      * @param string $attribute
      * @param mixed  $value
-     *
      * @return string
      */
     public function __set($attribute, $value)
@@ -58,13 +56,13 @@ class Condition
      * Operator.
      *
      * @param string $operator
-     *
      * @return string
      */
     protected function resolveOperator($operator)
     {
         $operators = array_merge(
             Expression::$comparisonOperators,
+            Expression::$wordOperators,
             Expression::$arrayableOperators
         );
 
@@ -80,7 +78,6 @@ class Condition
      *
      * @param string $key
      * @param string $operator
-     *
      * @return string the modified value
      */
     protected function resolveValue($value, $operator = '=')
@@ -100,7 +97,6 @@ class Condition
      * Check if operator exists.
      *
      * @param string|array $value
-     *
      * @return boolean
      */
     public function operator($value)
@@ -112,7 +108,6 @@ class Condition
      * Check if value exists.
      *
      * @param string|array $value
-     *
      * @return boolean
      */
     public function value($value, $key = null)
@@ -127,7 +122,6 @@ class Condition
      * Check if key exists.
      *
      * @param string|array $value
-     *
      * @return boolean
      */
     public function key($value)
@@ -140,7 +134,6 @@ class Condition
      *
      * @param string $value
      * @param string $attribute
-     *
      * @return string the modified value
      */
     protected function attributeValueExists($value, $attribute)
@@ -160,7 +153,6 @@ class Condition
      * Operator in.
      *
      * @param array $value
-     *
      * @return array
      */
     protected function operatorIn(array $value)
@@ -175,7 +167,6 @@ class Condition
      * Operator between.
      *
      * @param string $value
-     *
      * @return array
      */
     protected function operatorBetween(array $value)
@@ -191,8 +182,7 @@ class Condition
      * Is arrayble.
      *
      * @param string $operator
-     *
-     * @return bool
+     * @return boolean
      */
     protected function isArrayble($operator)
     {
@@ -204,7 +194,6 @@ class Condition
      *
      * @param string $value
      * @param string $delimeter
-     *
      * @return array $array
      */
     protected function asArray($value, $delimeter = ',')
@@ -222,7 +211,6 @@ class Condition
      * Normalise condition.
      *
      * @param string $value
-     *
      * @return array $array
      */
     protected function normalise($value)
@@ -234,7 +222,6 @@ class Condition
      * Extract condition.
      *
      * @param string $condition
-     *
      * @return array $array
      */
     protected function extract($condition)
@@ -254,6 +241,7 @@ class Condition
      * Resolve conditions.
      *
      * @param string $condition
+     * @return Smrtr\Expression\Condition
      */
     public function resolve($condition)
     {
