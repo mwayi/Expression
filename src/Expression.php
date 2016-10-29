@@ -10,7 +10,7 @@ use Smrtr\Expression\Condition;
 class Expression
 {
     /**
-     * @var array
+     * @var string
      */
     protected $origin = null;
 
@@ -25,7 +25,7 @@ class Expression
     protected $operatorCount = 0;
 
     /**
-     * @var array
+     * @var string
      */
     protected $normalised = null;
 
@@ -42,12 +42,9 @@ class Expression
     /**
      * @var array comparison operators
      */
-    public static $comparisonOperators = ['=', '!=', '>', '<', '<>', '><'];
-
-    /**
-     * @var array comparison operators
-     */
-    public static $wordOperators = ['is', 'in', 'not', 'greaterthan', 'lessthan', 'equalto', 'like', 'eq'];
+    public static $comparisonOperators = [
+        '=', '!=', '>', '<', '<>', '><', 'is', 'in', 'not', 'gt', 'lt', 'eq', 'like'
+    ];
 
     /**
      * @var array replacements
@@ -91,9 +88,10 @@ class Expression
     /**
      * Is enclosed group.
      *
-     * @param string $expression
-     *
-     * @return array
+     * @param  string $exp the expression.
+     * @param  string $open the opening boundary signature.
+     * @param  string $close the closing boundary signature.
+     * @return boolean
      */
     protected function isEnclosed($exp, $open = '(', $close = ')')
     {
@@ -103,9 +101,8 @@ class Expression
     /**
      * Normalise the expression.
      *
-     * @param string The expression string
-     *
-     * @return string The expression
+     * @param string $str normalise the expression string.
+     * @return string $normalised the normalised expression.
      */
     protected function normalise($str)
     {
@@ -120,7 +117,6 @@ class Expression
      * Resolve conditions.
      *
      * @param array $conditions
-     *
      * @return array $pairings
      */
     public function resolveConditions(array $conditions)
@@ -140,11 +136,10 @@ class Expression
     }
 
     /**
-     * To array.
+     * Generate the expression object.
      *
-     * @param string The expression
-     *
-     * @return array The expressions object
+     * @param string $str the expression.
+     * @return array $expObject the expressions object.
      */
     public function generateExpressionObjects($str)
     {
@@ -173,8 +168,7 @@ class Expression
     /**
      * Get Regions.
      *
-     * @param string $expression
-     *
+     * @param string $exp the expression.
      * @return array The key value indicies of where portions
      *               of the expression exist
      */
@@ -200,7 +194,10 @@ class Expression
      *
      * Regions are essentially boundaraires between parent parenthesis.
      *
-     * @return array array of regions
+     * @param  string $exp the compound expression to be segmented.
+     * @param  string $open the opening boundary signature.
+     * @param  string $close the closing boundary signature.
+     * @return array array of regions.
      */
     public function getRegionStrings($exp, $open = '(', $close = ')')
     {
@@ -230,9 +227,8 @@ class Expression
     /**
      * Resolve statement segemets.
      *
-     * @param string $statement
-     *
-     * @return array
+     * @param string $exp the expression.
+     * @return array $segments.
      */
     protected function resolveStatementSegments($exp)
     {
@@ -261,9 +257,8 @@ class Expression
      *
      * Ensure that ((((a + b)))) resolves to a + b
      *
-     * @param string $expression
-     *
-     * @return string The unwrapped expression
+     * @param  string $expression the expression.
+     * @return string The unwrapped expression.
      */
     protected function unwrap($expression)
     {
@@ -286,9 +281,10 @@ class Expression
     /**
      * Get Expression Index.
      *
-     * @param string $statement
-     *
-     * @return array
+     * @param  string $exp the expression.
+     * @param  string $open the opening boundary signature.
+     * @param  string $close the closing boundary signature.
+     * @return array  
      */
     public function getEnclosureIndex($exp, $open = '(', $close = ')')
     {
@@ -319,7 +315,6 @@ class Expression
      *                If true the expression will recurssively resolve to 'and', 'or' and true,
      *                false expressions, that subsequently provide a boolean answer.
      *                If false the expression will recurssively resolve to a new epxression string.
-     *
      * @return mixed
      */
     public function evaluate(\Closure $callback, $evaluate = false)
@@ -334,10 +329,9 @@ class Expression
     }
 
     /**
-     * Solve expression
+     * Solve expression.
      *
-     * @param string $expression
-     *
+     * @param string $expression the expression to be solved.
      * @return array
      */
     protected function solve($expression)
@@ -358,9 +352,8 @@ class Expression
      * Recurse method.
      *
      * @param array $items
-     * @param closure $callback to evaluate conditions
-     * @param boolean $evaluate the expression
-     *
+     * @param closure $callback to evaluate conditions.
+     * @param boolean $evaluate the expression.
      * @return array
      */
     private function _recurse($items, \Closure $callback, $evaluate = false)

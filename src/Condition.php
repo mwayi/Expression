@@ -65,7 +65,6 @@ class Condition
     {
         $operators = array_merge(
             Expression::$comparisonOperators,
-            Expression::$wordOperators,
             Expression::$arrayableOperators
         );
 
