@@ -40,36 +40,36 @@ class Expression extends Command
 	}
 
 	/**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['i', null, InputOption::VALUE_OPTIONAL, 'Input', null]
-        ];
-    }
+	 * Get the console command options.
+	 *
+	 * @return array
+	 */
+	protected function getOptions()
+	{
+		return [
+			['i', null, InputOption::VALUE_OPTIONAL, 'Input', null]
+		];
+	}
 
 	/**
-     * Execute the console command.
-     *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @return mixed
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {	
-    	$response = null;
+	 * Execute the console command.
+	 *
+	 * @param  \Symfony\Component\Console\Input\InputInterface  $input
+	 * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+	 * @return mixed
+	 */
+	protected function execute(InputInterface $input, OutputInterface $output)
+	{	
+		$response = null;
 
-    	try {
-	        $response = $this->fire();
-	    }
-	    catch(\Exception $e) {
-	    	return $this->error("\nException: Fatal Error.\n" . $e->getMessage());
-	    }
+		try {
+			$response = $this->fire();
+		}
+		catch(\Exception $e) {
+			return $this->error("\nException: Fatal Error.\n" . $e->getMessage());
+		}
 
-	    return $response;
-    }
+		return $response;
+	}
 
 }

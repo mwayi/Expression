@@ -10,4 +10,4 @@ function pre_dump($text, $die = true) {
 	print_r( $text );
 	echo "\n\n";
 	if($die) die;
-}
+}	
