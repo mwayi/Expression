@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+$command = new Smrtr\Expression\Commands\Compile;
+
+exit($command->run(new ArgvInput, new ConsoleOutput));

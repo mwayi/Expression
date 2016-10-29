@@ -1,0 +1,29 @@
+{
+    "name": "smrtr/condition",
+    "description": "A multi-purpose php condition parser.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mwayi Dzanjalimodzi",
+            "email": "mr.mwayi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Smrtr\\Condition\\": ["src"]
+        }
+    },
+    "require": {
+        "php": ">=5.3",
+        "illuminate/console": "^5.3"
+    },
+    "autoload-dev": {
+        "files": [
+            "src/support.php"
+        ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.0"
+    }
+}
