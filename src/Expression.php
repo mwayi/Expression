@@ -2,8 +2,10 @@
 
 namespace Smrtr\Expression;
 
+use Closure;
 use Smrtr\Expression\Condition;
 use Smrtr\Expression\Exceptions\UnableToSolveExpressionException;
+
 /**
  * 
  */
@@ -37,7 +39,9 @@ class Expression
 	/**
 	 * @var array arrayable operators.
 	 */
-	public static $arrayableOperators = ['in', 'between', 'between', 'notbetween'];
+	public static $arrayableOperators = [
+        'in', 'between', 'between', 'notbetween'
+    ];
 
 	/**
 	 * @var array comparison operators.
@@ -317,23 +321,26 @@ class Expression
 	/**
 	 * Recurse through an array and act on it.
 	 *
-	 * @param Closure $callback to handle the expressions
-	 * @param boolean $evaluate 
-	 *				If true the expression will recurssively resolve to 'and', 'or' and true,
-	 *				false expressions, that subsequently provide a boolean answer.
-	 *				If false the expression will recurssively resolve to a new epxression string.
-	 * @return mixed
+	 * @param Closure $callback to handle the expressions.
+	 * @return string
 	 */
-	public function evaluate(\Closure $callback, $evaluate = false)
+	public function evaluate(Closure $callback)
 	{   
-		$result = $this->_recurse($this->expObject, $callback, $evaluate);
-
-		if($evaluate) {
-			return $this->solve($result);
-		}
-
-		return $result;
+		return $this->_recurse($this->expObject, $callback, false);
 	}
+
+    /**
+     * Recurse through an array and act on it.
+     *
+     * @param Closure $callback to handle the expressions.
+     * @return boolean
+     */
+    public function solve(Closure $callback)
+    {   
+        $result = $this->_recurse($this->expObject, $callback, true);
+
+        return $this->solveExpression($result);
+    }
 
 	/**
 	 * Solve expression.
@@ -341,7 +348,7 @@ class Expression
 	 * @param string $expression the expression to be solved.
 	 * @return boolean the resulting expression value.
 	 */
-	protected function solve($expression)
+	protected function solveExpression($expression)
 	{
 		try {
 			if(strlen(trim($expression))) {
@@ -360,10 +367,13 @@ class Expression
 	 *
 	 * @param array $items
 	 * @param closure $callback to evaluate conditions.
-	 * @param boolean $evaluate the expression.
-	 * @return array
+	 * @param boolean $evaluate 
+     *              If true the expression will recurssively resolve to 'and', 'or' and true,
+     *              false expressions, that subsequently provide a boolean answer.
+     *              If false the expression will recurssively resolve to a new epxression string.
+	 * @return string
 	 */
-	private function _recurse($items, \Closure $callback, $evaluate = false)
+	private function _recurse($items, Closure $callback, $evaluate = false)
 	{
 		$return = null;
 		foreach ($items as $index => $item) {
@@ -380,4 +390,29 @@ class Expression
 
 		return $return;
 	}
+
+
+    /**
+     * Add valid element values.
+     *
+     * @param string|array $item
+     * @return boolean
+     */
+    public function mergeElementValues($item, $type)
+    {   
+        //$this->{$type}
+        // remove
+    }
+
+    /**
+     * Add valid element values.
+     *
+     * @param string|array $item
+     * @return boolean
+     */
+    public function purgeElementValues($item)
+    {   
+        // remove
+    }
 }
+

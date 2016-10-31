@@ -35,7 +35,7 @@ class Expression extends Command
 	{
 		$expression = new Expression($this->option('i'));
 		$expressionObject = $expression->toArray();
-
+		
 		pre_dump($expressionObject);
 	}
 

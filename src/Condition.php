@@ -149,8 +149,8 @@ class Condition
 	/**
 	 * Check if attribute value exists.
 	 *
-	 * @param string $value
-	 * @param string $attribute
+	 * @param string  $value
+	 * @param string  $attribute
 	 * @return string the modified value
 	 */
 	protected function attributeValueExists($value, $attribute)
@@ -265,7 +265,7 @@ class Condition
 		try {
 			$extracted = $this->extract($condition);
 		} catch (\Exception $e) {
-			throw new BadlyFormattedConditionException($condition, 'bad_signature');
+			throw new BadlyFormattedConditionException($condition);
 		}
 
 		if(0 === strlen($extracted['value']) && $extracted['operator']) {

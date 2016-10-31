@@ -21,16 +21,9 @@ class ExpressionTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('b', $condition->value);
 	}
 
-
 	public function testConditionHasCorrectElements()
 	{
-		$expression = new Condition('a = b');
-		$conditions = $expression->toArray();
-
-		$this->assertEquals(1, count($conditions));
-
-		$condition = array_shift($conditions);
-		$this->assertInstanceOf(Condition::class, $condition);
+		$condition = new Condition('a = b');
 		
 		$this->assertEquals('a', $condition->key);
 		$this->assertEquals('=', $condition->operator);
