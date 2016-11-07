@@ -2,12 +2,13 @@
 
 namespace Smrtr\Expression;
 
+use Exception;
 use Smrtr\Expression\Exceptions\BadlyFormattedConditionException;
 
 class Condition
 {
 	/**
-	 * @var array
+	 * @var array $attributes The condition attributes.
 	 */
 	protected $attributes = [
 		'key' => null,
@@ -28,7 +29,9 @@ class Condition
 	 * Get attributes.
 	 *
 	 * @param string $attribute
-	 * @return string
+	 * @return mixed $attribute 
+	 *
+	 * @throws Exception if attribute does not exist.
 	 */
 	public function __get($attribute)
 	{
@@ -36,7 +39,7 @@ class Condition
 			return $this->attributes[$attribute];
 		}
 
-		throw new \Exception('Attribute [['.$attribute.']] does not exist.');
+		throw new Exception('Attribute [['.$attribute.']] does not exist.');
 	}
 
 	/**
@@ -45,6 +48,8 @@ class Condition
 	 * @param string $attribute
 	 * @param mixed  $value
 	 * @return string
+	 *
+	 * @throws Exception if attribute does not exist.
 	 */
 	public function __set($attribute, $value)
 	{
@@ -52,7 +57,7 @@ class Condition
 			return $this->attributes[$attribute] = $value;
 		}
 
-		throw new \Exception('Attribute [['.$attribute.']] does not exist.');
+		throw new Exception('Attribute [['.$attribute.']] does not exist.');
 	}
 
 	/**
@@ -63,6 +68,8 @@ class Condition
 	 * @param string|null  $value the value of the condition.
 	 * @param string|null  $operator the operator of the condition.
 	 * @return string      $operator
+	 *
+	 * @throws Exception if attribute does not exist.
 	 */
 	protected function resolveOperator($value, $operator)
 	{
@@ -76,8 +83,8 @@ class Condition
 			Expression::$arrayableOperators
 		);
 
-		if (trim($operator) && !in_array($operator, $operators)) {
-			throw new \Exception("Unrecognised operator [[$operator]]. Must be (".implode(', ', $operators).')');
+		if (trim($operator) && ! in_array($operator, $operators)) {
+			throw new Exception("Unrecognised operator [[$operator]]. Must be (".implode(', ', $operators).')');
 		}
 
 		return trim($operator);
@@ -102,7 +109,7 @@ class Condition
 			$value = $this->asArray($value);
 		}
 
-		if (method_exists($this, ($method = 'operator'.ucfirst($operator)))) {
+		if (method_exists($this, ($method = 'operator' . ucfirst($operator)))) {
 			return $this->{$method}($value);
 		}
 
@@ -129,7 +136,7 @@ class Condition
 	 */
 	public function hasValue($value, $key = null)
 	{   
-		if($key && !$this->hasKey($key)) {
+		if($key && ! $this->hasKey($key)) {
 			return false;
 		}
 		return $this->attributeValueExists($value, 'value');
@@ -155,7 +162,7 @@ class Condition
 	 */
 	protected function attributeValueExists($value, $attribute)
 	{
-		if (!array_key_exists($attribute, $this->attributes)) {
+		if (! array_key_exists($attribute, $this->attributes)) {
 			return false;
 		}
 
@@ -175,7 +182,7 @@ class Condition
 	protected function operatorIn(array $value)
 	{
 		if (empty($value)) {
-			throw new \Exception('The in operator cannot be empty.');
+			throw new Exception('The in operator cannot be empty.');
 		}
 		return $value;
 	}
@@ -189,7 +196,7 @@ class Condition
 	protected function operatorBetween(array $value)
 	{
 		if (($total = count($value)) !== 2) {
-			throw new \Exception('The between operator must have exactly two values. '.$total.' supplied.');
+			throw new Exception('The between operator must have exactly two values. '.$total.' supplied.');
 		}
 
 		return $value;
@@ -243,9 +250,10 @@ class Condition
 	 */
 	protected function extract($condition)
 	{
-		$condition = $this->normalise($condition);
-
-		$portions = array_merge($this->asArray($condition, ' '), [null, null, null]);
+		$portions = array_merge(
+			$this->asArray($this->normalise($condition), ' '), 
+			[null, null, null]
+		);
 
 		list($key, $operator) = array_values($portions);
 
@@ -257,19 +265,21 @@ class Condition
 	/**
 	 * Resolve conditions.
 	 *
-	 * @param string $condition
+	 * @param  string $condition
 	 * @return Smrtr\Expression\Condition
+	 *
+	 * @throws Exception if expression is unresolveabe.
 	 */
 	public function resolve($condition)
 	{
 		try {
 			$extracted = $this->extract($condition);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			throw new BadlyFormattedConditionException($condition);
 		}
 
 		if(0 === strlen($extracted['value']) && $extracted['operator']) {
-			throw new \Exception("Unable to resolve expression [[$condition]], value must not be empty if operator is set.");
+			throw new Exception("Unable to resolve expression [[$condition]], value must not be empty if operator is set.");
 		}
 
 		$this->attributes['key'] = $extracted['key'];

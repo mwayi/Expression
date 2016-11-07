@@ -6,10 +6,13 @@ use Smrtr\Expression\Condition;
 
 class ExpressionTest extends \PHPUnit_Framework_TestCase
 {	
+	/**
+	 * Test validity of single condition.
+	 */
 	public function testHasSingleCondition()
 	{
 		$expression = new Expression('a = b');
-		$conditions = $expression->toArray();
+		$conditions = $expression->execute()->toArray();
 
 		$this->assertEquals(1, count($conditions));
 
@@ -21,6 +24,9 @@ class ExpressionTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('b', $condition->value);
 	}
 
+	/**
+	 * Test condition has correct elements.
+	 */
 	public function testConditionHasCorrectElements()
 	{
 		$condition = new Condition('a = b');

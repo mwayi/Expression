@@ -1,6 +1,6 @@
 <?php
 
-namespace Smrtr\Expression;
+namespace Smrtr\Expression\Adaptors;
 
 use PDO;
 

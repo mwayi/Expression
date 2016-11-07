@@ -34,7 +34,9 @@ class Expression
 	/**
 	 * @var array logical operators.
 	 */
-	public static $logicalOperators = ['and', 'or'];
+	public static $logicalOperators = [
+		'and', 'or'
+	];
 
 	/**
 	 * @var array arrayable operators.
@@ -65,7 +67,7 @@ class Expression
 		'/[\s]+/' => ' ',	   // one space only
 		'/\s?\(\s?/' => '(',	// remove white space on opening
 		'/\s?\)\s?/' => ')',	// remove white space on closing
-		'/\s?\,\s?/' => ',',	// ensure all commas separated values are cleared of whitespace
+		'/\s?([\,\:])\s?/' => '$1',	// ensure all commas separated values are cleared of whitespace
 	];
 
 	/**
@@ -79,11 +81,23 @@ class Expression
 	public function __construct($expression)
 	{
 		$this->origin = $expression;
+	}
+
+	/**
+	 * Execute the expression.
+	 * This will generate the expression object.
+	 *
+	 * @return Smrtr\Expression\Expression
+	 */
+	public function execute()
+	{
 		$this->expObject = $this->generateExpressionObjects($this->origin);
 
 		if($this->conditionCount && $this->conditionCount - 1 !== $this->operatorCount) {
 			throw new \Exception("Badly formatted expression. There aren't enough logical operators.");
 		}
+
+		return $this;
 	}
 
 	/**
@@ -134,7 +148,8 @@ class Expression
 	{
 		$pairings = [];
 		foreach ($conditions as $condition) {
-			if (!in_array($condition, self::$logicalOperators)) {
+
+			if (!in_array(strtolower($condition), self::$logicalOperators)) {
 				++$this->conditionCount;
 				$pairings[] = new Condition($condition);
 			} else {
@@ -326,7 +341,7 @@ class Expression
 	 */
 	public function evaluate(Closure $callback)
 	{   
-		return $this->_recurse($this->expObject, $callback, false);
+		return $this->execute()->recurse($this->expObject, $callback, false);
 	}
 
     /**
@@ -337,7 +352,7 @@ class Expression
      */
     public function solve(Closure $callback)
     {   
-        $result = $this->_recurse($this->expObject, $callback, true);
+        $result = $this->execute()->recurse($this->expObject, $callback, true);
 
         return $this->solveExpression($result);
     }
@@ -363,7 +378,7 @@ class Expression
 	}
 
 	/**
-	 * Recurse method.
+	 * Recursion factory.
 	 *
 	 * @param array $items
 	 * @param closure $callback to evaluate conditions.
@@ -373,7 +388,7 @@ class Expression
      *              If false the expression will recurssively resolve to a new epxression string.
 	 * @return string
 	 */
-	private function _recurse($items, Closure $callback, $evaluate = false)
+	private function recurse($items, Closure $callback, $evaluate = false)
 	{
 		$return = null;
 		foreach ($items as $index => $item) {
@@ -384,13 +399,44 @@ class Expression
 			} elseif (is_string($item)) {
 				$return .= ' ' . strtoupper($item) . ' ';
 			} elseif (is_array($item)) {
-				$return .= '('.$this->_recurse($item, $callback, $evaluate) . ')';
+				$return .= '('.$this->recurse($item, $callback, $evaluate) . ')';
 			}
 		}
 
 		return $return;
 	}
 
+	/**
+     * Get operators
+     *
+     * @return array $operators
+     */
+    public function getOperators()
+    {   
+    	return $this->operators;
+    }
+
+    /**
+     * Add operator.
+     *
+     * @param string|array $item
+     * @return boolean
+     */
+    public function addOperator($operator, array $config = null)
+    {   
+    	self::$wordOperators[strtolower($operator)] = strtolower($operator);
+    }
+
+    /**
+     * Add logical operator
+     *
+     * @param string|array $item
+     * @return boolean
+     */
+    public function addLogicalOperator($operator)
+    {   
+    	self::$logicalOperators[strtolower($operator)] = strtolower($operator);
+    }
 
     /**
      * Add valid element values.
