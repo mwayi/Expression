@@ -1,5 +1,7 @@
 # Expression
 
+![status](https://codeship.com/projects/fbcac2e0-86f0-0134-2e8e-36c2ccf79a16/status?branch=master)
+
 A multi-purpose expression parser.
 
 The expression parser allows developers to pass in a plain text statement that can be resolved to one of the following:- 
