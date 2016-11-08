@@ -149,7 +149,7 @@ class Expression
 		$pairings = [];
 		foreach ($conditions as $condition) {
 
-			if (!in_array(strtolower($condition), self::$logicalOperators)) {
+			if (! in_array(strtolower($condition), self::$logicalOperators)) {
 				++$this->conditionCount;
 				$pairings[] = new Condition($condition);
 			} else {
@@ -166,6 +166,8 @@ class Expression
 	 *
 	 * @param string $str the expression.
 	 * @return array $expObject the expressions object.
+	 *
+	 * @throws Exception if expression cannot be terminated by operator.
 	 */
 	public function generateExpressionObjects($str)
 	{
@@ -311,6 +313,8 @@ class Expression
 	 * @param  string $open the opening boundary signature.
 	 * @param  string $close the closing boundary signature.
 	 * @return array  
+	 *
+	 * @throws Exception if there are unmatched tags
 	 */
 	public function getEnclosureIndex($exp, $open = '(', $close = ')')
 	{
@@ -413,7 +417,17 @@ class Expression
      */
     public function getOperators()
     {   
-    	return $this->operators;
+    	return self::$operators;
+    }
+
+    /**
+     * Get logical operators.
+     *
+     * @return array $operators
+     */
+    public function getLogicalOperators()
+    {   
+    	return self::$logicalOperators;
     }
 
     /**

@@ -35,4 +35,15 @@ class ExpressionTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('=', $condition->operator);
 		$this->assertEquals('b', $condition->value);
 	}
+
+	/**
+	 * Test expression can add logical operators.
+	 */
+	public function testExpressionHasLogicOperator()
+	{
+		$expression = new Expression('a = 3 xor b = 2');
+		$expression->addLogicalOperator('exor');
+
+		$this->assertContains('exor', $expression->getLogicalOperators());
+	}
 }

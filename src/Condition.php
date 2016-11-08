@@ -36,6 +36,7 @@ class Condition
 	public function __get($attribute)
 	{
 		if (array_key_exists($attribute, $this->attributes)) {
+
 			return $this->attributes[$attribute];
 		}
 
@@ -54,6 +55,7 @@ class Condition
 	public function __set($attribute, $value)
 	{
 		if (array_key_exists($attribute, $this->attributes)) {
+
 			return $this->attributes[$attribute] = $value;
 		}
 
@@ -74,6 +76,7 @@ class Condition
 	protected function resolveOperator($value, $operator)
 	{
 		if(empty($value) && empty($operator)) {
+
 			return '=';
 		}
 
@@ -137,8 +140,10 @@ class Condition
 	public function hasValue($value, $key = null)
 	{   
 		if($key && ! $this->hasKey($key)) {
+
 			return false;
 		}
+
 		return $this->attributeValueExists($value, 'value');
 	}
 
@@ -223,10 +228,13 @@ class Condition
 	protected function asArray($value, $delimeter = ',')
 	{
 		$array = explode($delimeter, trim($value, $delimeter));
-		return array_filter($array, function($value){
+
+		return array_filter($array, function($value) {
 			if(is_string($value) && !strlen($value)) {
+
 				return false;
 			}
+
 			return true;
 		});
 	}
@@ -268,7 +276,7 @@ class Condition
 	 * @param  string $condition
 	 * @return Smrtr\Expression\Condition
 	 *
-	 * @throws Exception if expression is unresolveabe.
+	 * @throws Exception if expression is unresolveable.
 	 */
 	public function resolve($condition)
 	{
