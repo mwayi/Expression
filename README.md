@@ -13,7 +13,7 @@ The expression parser allows developers to pass in a plain text statement that c
 Here is a sample use case:
 
 	$expression = new \Smrtr\Expression('a = b');
-	$conditions = $expression->toArray();
+	$conditions = $expression->execute()->toArray();
 	print_r($conditions);
 
 Would resolve to:
